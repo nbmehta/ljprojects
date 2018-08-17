@@ -1,8 +1,6 @@
 package com.ljproject.configuration;
 
-import java.util.Properties;
-
-
+ import java.util.Properties; 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -84,14 +82,12 @@ public class HibernateConfiguration {
         mailSender.setPort(587);
         mailSender.setUsername("testg6658@gmail.com");
         mailSender.setPassword("9924856065");
-         
+     
         Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.starttls.enable", "true");
         javaMailProperties.put("mail.smtp.auth", "true");
         javaMailProperties.put("mail.debug", "true");
-        
-         
-         
+             
         mailSender.setJavaMailProperties(javaMailProperties);
         return mailSender;
     }

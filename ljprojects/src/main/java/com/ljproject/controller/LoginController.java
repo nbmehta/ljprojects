@@ -1,14 +1,12 @@
 package com.ljproject.controller;
 
-import java.time.Instant;
-
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,11 +17,13 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ljproject.LjprojectApplication;
 import com.ljproject.dto.ChangePasswordDto;
 import com.ljproject.dto.PasswordForgotDto;
 import com.ljproject.model.PasswordResetToken;
@@ -40,31 +40,31 @@ import com.ljproject.util.TokenService;
 import antlr.collections.List;
 
 @Controller
-public class LoginController {				
+public class LoginController {
+	
+	 public static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private MailService mailService;
-	
+
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
-	
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
 	OtpService otpService;
-	
+
 	@Autowired
 	PasswordResetTokenRepository passwordResetTokenRepository;
 
@@ -76,23 +76,31 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = { "/", "/home" }, method = RequestMethod.GET)
-	public String homePage(ModelMap model) {
-		model.addAttribute("user", getPrincipal());
-		return "login";
+	public String homePage() {
+
+		return "home";
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String adminPage(ModelMap model) {
 		model.addAttribute("user", getPrincipal());
-		java.util.List<User> listuser=userService.listUser();
+		java.util.List<User> listuser = userService.listUser();
 		model.addAttribute("listuser", listuser);
 		return "admin";
 	}
+	
+	 @RequestMapping(value = { "/admin/delete/{id}" }, method = RequestMethod.GET)
+	    public String deleteUser(@PathVariable long id) {
+	        userService.deleteUserById(id);
+	        return "redirect:/admin";
+	    }
+	 
+	
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public String userPage(ModelMap model) {
 		model.addAttribute("user", getPrincipal());
-		
+
 		return "welcome";
 	}
 
@@ -107,114 +115,103 @@ public class LoginController {
 		model.addAttribute("user", getPrincipal());
 		return "accessDenied";
 	}
+
 	@RequestMapping(value = "/forgotPassword", method = RequestMethod.GET)
 	public String forgotPassword(ModelMap model) {
-		model.addAttribute("PasswordForgotDto",new PasswordForgotDto());
+		model.addAttribute("PasswordForgotDto", new PasswordForgotDto());
 		return "forgotPassword";
 	}
-	
-	
+
 	@RequestMapping(value = "/reset/changePassword", method = RequestMethod.GET)
-	public String changePassword(@RequestParam(required = false) String token,@RequestParam("id") long id,Model model) {
-		
-		System.out.println(token);
+	public String changePassword(@RequestParam(required = false) String token, @RequestParam("id") long id,
+			Model model) {
+
+		logger.info("Token==================>" +token);
 		model.addAttribute("changePassword", new ChangePasswordDto());
-		String reStringsult=tokenService.validatePasswordResetToken(id, token);
-		System.out.println("testing demo"+reStringsult);
+		String reStringsult = tokenService.validatePasswordResetToken(id, token);
+		logger.info("testing demo" + reStringsult);
 		model.addAttribute("token", token);
 		model.addAttribute("userid", id);
-		if(reStringsult==null)
-		{
-			
+		if (reStringsult == null) {
+
 			return "resetPassword";
 		}
-		
-		
-		
+
 		return reStringsult;
 	}
-	
-	
-	
-	
-	@RequestMapping(value = {"/admin/updatePassword","/user/updatePassword"}, method = RequestMethod.GET)
-	public String updatePassword(@RequestParam(required = false) String token,Model model) {
+
+	@RequestMapping(value = { "/admin/updatePassword", "/user/updatePassword" }, method = RequestMethod.GET)
+	public String updatePassword(@RequestParam(required = false) String token, Model model) {
 		Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-		PasswordResetToken user2=passwordResetTokenRepository.findByToken(token);
+		PasswordResetToken user2 = passwordResetTokenRepository.findByToken(token);
+		logger.info(loggedInUser.getName());
 		System.out.println(loggedInUser.getName());
 		model.addAttribute("updatePassword", new ChangePasswordDto());
 		return "updatePassword";
 	}
-	
-	
-	@RequestMapping(value = {"/admin/updatePassword","/user/updatePassword"}, method = RequestMethod.POST)
-	public String updatePass(@RequestParam(required = false) String token,Model model,@ModelAttribute("updatePassword") ChangePasswordDto changePasswordDto ) {
-		
-		
+
+	@RequestMapping(value = { "/admin/updatePassword", "/user/updatePassword" }, method = RequestMethod.POST)
+	public String updatePass(@RequestParam(required = false) String token, Model model,
+			@ModelAttribute("updatePassword") ChangePasswordDto changePasswordDto) {
+
 		Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-		
-		System.out.println("Thsi is testing api ------------------------------------");
-		System.out.println(loggedInUser.getName());
-		User user=userService.findUserByEmail(loggedInUser.getName());
+
+		logger.info("Thsi is testing api ------------------------------------");
+		logger.info(loggedInUser.getName());
+		User user = userService.findUserByEmail(loggedInUser.getName());
 		System.out.println(changePasswordDto.getOldPassword() + changePasswordDto.getConfirmpasword());
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  
-		encoder.matches(changePasswordDto.getOldPassword(), user.getPassword()); 
-		
-		
-		if(user.getPassword().equals(changePasswordDto.getOldPassword())&& changePasswordDto.getPassword().equals(changePasswordDto.getConfirmpasword()))
-		{
-			
-			System.out.println("insite if loop");
-		}	
-		
-		
-		
-		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		encoder.matches(changePasswordDto.getOldPassword(), user.getPassword());
+
+		if (user.getPassword().equals(changePasswordDto.getOldPassword())
+				&& changePasswordDto.getPassword().equals(changePasswordDto.getConfirmpasword())) {
+
+			logger.info("insite if loop");
+		}
+
 		return "updatePassword";
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/reset/submit", method = RequestMethod.POST)
-	public String changePassword(@ModelAttribute("changePassword") ChangePasswordDto changePasswordDto,@RequestParam("token")String token,@RequestParam("userId")long userId) {
-		
-	System.out.println("this is test "+token);	
-	PasswordResetToken ps= passwordResetTokenRepository.findByToken(token);
-	
-	User user=ps.getUser();
-	user.setPassword(changePasswordDto.getPassword());
-	
-	System.out.println("this is testing password"+user.getPassword());
-	if(changePasswordDto.getPassword().equals(changePasswordDto.getConfirmpasword()))
-	{	
-	userService.saveUser(user);
-	}
-	System.out.println("save successfully ");
-	
-	System.out.println("this is test "+userId);	
+	public String changePassword(@ModelAttribute("changePassword") ChangePasswordDto changePasswordDto,
+			@RequestParam("token") String token, @RequestParam("userId") long userId) {
+
+		logger.info("this is test " + token);
+		PasswordResetToken ps = passwordResetTokenRepository.findByToken(token);
+
+		User user = ps.getUser();
+		user.setPassword(changePasswordDto.getPassword());
+
+		logger.info("this is testing password" + user.getPassword());
+		if (changePasswordDto.getPassword().equals(changePasswordDto.getConfirmpasword())) {
+			userService.saveUser(user);
+		}
+		logger.info("save successfully ");
+
+		logger.info("this is test " + userId);
 		return "resetPassword";
 	}
-	
-	
+
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
-	public String reset( @ModelAttribute("PasswordForgotDto")PasswordForgotDto passwordForgotDto) throws UserNotFoundException {
+	public String reset(@ModelAttribute("PasswordForgotDto") PasswordForgotDto passwordForgotDto)
+			throws UserNotFoundException {
 		User user = userService.findUserByEmail(passwordForgotDto.getEmail());
-	    if (user == null) {
-	        throw new UserNotFoundException();
-	    }
-	    String token = UUID.randomUUID().toString();
-		System.out.println(passwordForgotDto.getEmail());
-		PasswordResetToken ps= new PasswordResetToken();
+		if (user == null) {
+			throw new UserNotFoundException();
+		}
+		String token = UUID.randomUUID().toString();
+		logger.info(passwordForgotDto.getEmail());
+		PasswordResetToken ps = new PasswordResetToken();
 		ps.setUser(user);
 		ps.setExpiryDate(1);
 		ps.setToken(token);
-		
+
 		tokenService.sendRestLink(user, token);
-			
+
 		passwordResetTokenRepository.save(ps);
 		return "forgotPassword";
 	}
-	
+
 	/*
 	 * @RequestMapping(value = "/login", method = RequestMethod.GET) public String
 	 * loginPage() { return "login"; }
@@ -242,7 +239,7 @@ public class LoginController {
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
-		
+
 		User userExists = userService.findUserByEmail(user.getEmail());
 		if (userExists != null) {
 			bindingResult.rejectValue("email", "error.user",
@@ -251,19 +248,20 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registration");
 		} else {
-			
-			
-			char[] otp=otpService.genrateOtp();
-            String convertedOtp=new String(otp);
-            user.setOtp(convertedOtp);
-            user.setCreatedOn(LocalTime.now());
-    		user.setLastLogin(LocalTime.now());;
+
+			char[] otp = otpService.genrateOtp();
+			String convertedOtp = new String(otp);
+			user.setOtp(convertedOtp);
+			user.setCreatedOn(LocalTime.now());
+			user.setLastLogin(LocalTime.now());
+			;
 			userService.saveUser(user);
-			Role role=roleRepository.findOne(user.getId());
-			
-			userService.sendEmailforApprove(user);;
-			
-			System.out.println("Role user ===>"+user.getRoles().toString());
+			Role role = roleRepository.findOne((int) user.getId());
+
+			userService.sendEmailforApprove(user);
+			;
+
+			logger.info("Role user ===>" + user.getRoles().toString());
 			mailService.sendEmail(user);
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());

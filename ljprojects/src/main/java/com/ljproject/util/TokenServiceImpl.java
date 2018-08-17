@@ -6,6 +6,8 @@ import java.util.Calendar;
 import javax.jws.soap.SOAPBinding.Use;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.ljproject.controller.LoginController;
 import com.ljproject.model.PasswordResetToken;
 import com.ljproject.model.User;
 import com.ljproject.repository.PasswordResetTokenRepository;
@@ -25,6 +28,8 @@ import com.ljproject.repository.PasswordResetTokenRepository;
 
 @Service("tokenService")
 public class TokenServiceImpl implements TokenService{
+	
+	 public static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 	
 	@Autowired
 	PasswordResetTokenRepository passwordResetTokenRepository;
@@ -48,10 +53,10 @@ public class TokenServiceImpl implements TokenService{
 					
 				MimeMessagePreparator preparator = getContentWtihAttachementMessagePreparator(user,ps);  
 	            mailSender.send(preparator);
-	            System.out.println("Reset link has been sent.............................");
+	            logger.info("Reset link has been sent.............................");
 	          
 	        } catch (MailException ex) {
-	            System.err.println(ex.getMessage());
+	        	logger.info(ex.getMessage());
 	        }
 		 
 		 return token;

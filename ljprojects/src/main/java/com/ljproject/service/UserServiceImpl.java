@@ -9,6 +9,8 @@ import java.util.List;
 import javax.mail.internet.MimeMessage;
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,6 +19,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ljproject.LjprojectApplication;
 import com.ljproject.model.Role;
 import com.ljproject.model.User;
 import com.ljproject.repository.RoleRepository;
@@ -26,6 +29,7 @@ import com.ljproject.repository.UserRepository;
 
 @Service("userService")
 public class UserServiceImpl implements UserService{
+	 public static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	private UserRepository userRepository;
@@ -51,7 +55,7 @@ public class UserServiceImpl implements UserService{
 	public void saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(1);
-        Role userRole = roleRepository.findByRole("ROLE_USER");
+         Role userRole = roleRepository.findByRole("ROLE_USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		userRepository.save(user);
 	}
@@ -69,10 +73,10 @@ public class UserServiceImpl implements UserService{
 		 
         try {
             mailSender.send(preparator);
-            System.out.println("Otp has been sent.............................");
+            logger.info("Otp has been sent.............................");
           
         } catch (MailException ex) {
-            System.err.println(ex.getMessage());
+        	logger.info(ex.getMessage());
         }
 	
 		
@@ -110,6 +114,15 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		List<User> listuser=userRepository.findAll();
 		return listuser;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.ljproject.service.UserService#deleteUserById(java.lang.Long)
+	 */
+	@Override
+	public void deleteUserById(long id) {
+		// TODO Auto-generated method stub
+		userRepository.delete(id);
 	}
 
 	

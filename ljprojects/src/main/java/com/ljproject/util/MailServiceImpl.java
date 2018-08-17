@@ -2,6 +2,8 @@ package com.ljproject.util;
 
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,12 +11,14 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
+import com.ljproject.controller.LoginController;
 import com.ljproject.model.User;
 
 
 
 @Service("mailService")
 public class MailServiceImpl implements MailService {
+	 public static final Logger logger = LoggerFactory.getLogger(MailServiceImpl.class);
 
 	 @Autowired
 	 JavaMailSender mailSender;
@@ -31,10 +35,10 @@ public class MailServiceImpl implements MailService {
 		 
         try {
             mailSender.send(preparator);
-            System.out.println("Otp has been sent.............................");
+            logger.info("Otp has been sent.............................");
           
         } catch (MailException ex) {
-            System.err.println(ex.getMessage());
+        	logger.info(ex.getMessage());
         }
 		
 	}

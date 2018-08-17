@@ -10,4 +10,5 @@ import com.ljproject.model.User;
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<User, Long> {
 	 User findByEmail(String email);
+	 void deleteUserById(long id);
 }

@@ -2,6 +2,8 @@ package com.ljproject.util;
 
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 @Service("OtpService")
 public class OtpServiceImpl implements OtpService {
+	
+	 public static final Logger logger = LoggerFactory.getLogger(OtpServiceImpl.class);
 
 
 	 @Autowired
@@ -21,8 +25,8 @@ public class OtpServiceImpl implements OtpService {
 	
 	@Override
 	public char[] genrateOtp() {
-		System.out.println("Generating OTP using random() : ");
-	    System.out.print("You OTP is : ");
+		logger.info("Generating OTP using random() : ");
+		logger.info("You OTP is : ");
 
 	    // Using numeric values
 	    String numbers = "0123456789";
