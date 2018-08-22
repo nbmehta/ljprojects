@@ -42,6 +42,11 @@ public class User {
 	@Email(message = "*Please provide a valid Email")
 	@NotEmpty(message = "*Please provide an email")
 	private String email;
+	
+	
+	
+	
+
 	@Column(name = "password")
 	@Length(min = 8, message = "*Your password must have at least 8 characters")
 	@NotEmpty(message = "*Please provide your password")
@@ -167,6 +172,7 @@ public class User {
 		this.email = email;
 	}
 
+	
 	public int getActive() {
 		return active;
 	}

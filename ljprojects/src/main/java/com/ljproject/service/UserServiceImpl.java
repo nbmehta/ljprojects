@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import javax.mail.internet.MimeMessage;
 
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserRepository userRepository;
+	
 	@Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -41,8 +43,7 @@ public class UserServiceImpl implements UserService{
     @Autowired
     JavaMailSender mailSender;
     
-    @Autowired
-    private SessionFactory sessionFactory;
+   
     
  
 	

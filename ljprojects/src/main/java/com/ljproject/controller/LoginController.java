@@ -2,6 +2,7 @@ package com.ljproject.controller;
 
 import java.time.LocalTime;
 
+import java.util.Optional;
 import java.util.UUID;
 import javax.validation.Valid;
 
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ljproject.LjprojectApplication;
+
 import com.ljproject.dto.ChangePasswordDto;
 import com.ljproject.dto.PasswordForgotDto;
 import com.ljproject.model.PasswordResetToken;
@@ -31,13 +32,11 @@ import com.ljproject.model.Role;
 import com.ljproject.model.User;
 import com.ljproject.repository.PasswordResetTokenRepository;
 import com.ljproject.repository.RoleRepository;
-import com.ljproject.repository.UserRepository;
 import com.ljproject.service.UserService;
 import com.ljproject.util.MailService;
 import com.ljproject.util.OtpService;
 import com.ljproject.util.TokenService;
 
-import antlr.collections.List;
 
 @Controller
 public class LoginController {
@@ -55,12 +54,11 @@ public class LoginController {
 
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	
 
-	@Autowired
-	private UserRepository userRepository;
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 
 	@Autowired
 	OtpService otpService;
@@ -86,7 +84,7 @@ public class LoginController {
 		model.addAttribute("user", getPrincipal());
 		java.util.List<User> listuser = userService.listUser();
 		model.addAttribute("listuser", listuser);
-		return "admin";
+		return "dashboard";
 	}
 	
 	 @RequestMapping(value = { "/admin/delete/{id}" }, method = RequestMethod.GET)
@@ -102,6 +100,13 @@ public class LoginController {
 		model.addAttribute("user", getPrincipal());
 
 		return "welcome";
+	}
+	
+	@RequestMapping(value = "/table", method = RequestMethod.GET)
+	public String tablePage() {
+	
+
+		return "table";
 	}
 
 	@RequestMapping(value = "/db", method = RequestMethod.GET)
@@ -143,7 +148,7 @@ public class LoginController {
 	@RequestMapping(value = { "/admin/updatePassword", "/user/updatePassword" }, method = RequestMethod.GET)
 	public String updatePassword(@RequestParam(required = false) String token, Model model) {
 		Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-		PasswordResetToken user2 = passwordResetTokenRepository.findByToken(token);
+		
 		logger.info(loggedInUser.getName());
 		System.out.println(loggedInUser.getName());
 		model.addAttribute("updatePassword", new ChangePasswordDto());
@@ -158,17 +163,8 @@ public class LoginController {
 
 		logger.info("Thsi is testing api ------------------------------------");
 		logger.info(loggedInUser.getName());
-		User user = userService.findUserByEmail(loggedInUser.getName());
 		System.out.println(changePasswordDto.getOldPassword() + changePasswordDto.getConfirmpasword());
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		encoder.matches(changePasswordDto.getOldPassword(), user.getPassword());
-
-		if (user.getPassword().equals(changePasswordDto.getOldPassword())
-				&& changePasswordDto.getPassword().equals(changePasswordDto.getConfirmpasword())) {
-
-			logger.info("insite if loop");
-		}
-
+		
 		return "updatePassword";
 	}
 
@@ -202,11 +198,11 @@ public class LoginController {
 		String token = UUID.randomUUID().toString();
 		logger.info(passwordForgotDto.getEmail());
 		PasswordResetToken ps = new PasswordResetToken();
-		ps.setUser(user);
+		
 		ps.setExpiryDate(1);
 		ps.setToken(token);
 
-		tokenService.sendRestLink(user, token);
+	//tokenSe	rvice.sendRestLink(user, token);
 
 		passwordResetTokenRepository.save(ps);
 		return "forgotPassword";
