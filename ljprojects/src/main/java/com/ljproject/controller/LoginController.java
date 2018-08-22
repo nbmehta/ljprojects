@@ -102,12 +102,6 @@ public class LoginController {
 		return "welcome";
 	}
 	
-	@RequestMapping(value = "/table", method = RequestMethod.GET)
-	public String tablePage() {
-	
-
-		return "table";
-	}
 
 	@RequestMapping(value = "/db", method = RequestMethod.GET)
 	public String dbaPage(ModelMap model) {
