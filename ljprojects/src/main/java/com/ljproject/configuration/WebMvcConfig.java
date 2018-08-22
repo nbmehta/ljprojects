@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -25,6 +26,15 @@ import org.springframework.web.servlet.view.JstlView;
 @Import({ SecurityConfiguration.class })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
+   private final long MAX_AGE_SECS = 3600;
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+	        registry.addMapping("/**")
+	                .allowedOrigins("*")
+	                .allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE")
+	                .maxAge(MAX_AGE_SECS);
+	    }
 	
 	 	    
 	@Bean

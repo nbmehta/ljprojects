@@ -3,9 +3,10 @@ package com.ljproject.service;
 import java.util.Arrays;
 
 
+
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+
 
 import javax.mail.internet.MimeMessage;
 
@@ -20,7 +21,6 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ljproject.LjprojectApplication;
 import com.ljproject.model.Role;
 import com.ljproject.model.User;
 import com.ljproject.repository.RoleRepository;
@@ -39,6 +39,10 @@ public class UserServiceImpl implements UserService{
     private RoleRepository roleRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    
+    @Autowired
+	private SessionFactory sessionFactory;
+
     
     @Autowired
     JavaMailSender mailSender;

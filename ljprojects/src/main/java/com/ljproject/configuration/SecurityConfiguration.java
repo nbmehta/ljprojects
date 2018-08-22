@@ -35,6 +35,11 @@ import com.ljproject.handler.EventListeners;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 

@@ -1,36 +1,27 @@
 package com.ljproject.model;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import javax.validation.constraints.Size;
 
-import org.apache.tomcat.jni.Local;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Transient;
 
 @Entity
@@ -97,13 +88,7 @@ public class User {
 	private String verify;
 
 
-	@CreatedDate
-	@Column(name = "createdOn")
-	private LocalTime createdOn;
-
-		
-	@Column(name = "lastLogin")
-	private LocalTime lastLogin;
+	
 	
 	
 	@Column(name = "approved")
@@ -112,21 +97,7 @@ public class User {
 
 
 
-	public LocalTime getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(LocalTime localTime) {
-		this.createdOn = localTime;
-	}
-
-	public LocalTime getLastLogin() {
-		return lastLogin;
-	}
-
-	public void setLastLogin(LocalTime lastLogin) {
-		this.lastLogin = lastLogin;
-	}
+	
 
 	public String getVerify() {
 		return verify;

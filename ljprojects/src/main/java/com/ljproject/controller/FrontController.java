@@ -3,12 +3,18 @@
  */
 package com.ljproject.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.ljproject.model.User;
+import com.ljproject.service.UserService;
 
 /**
  * @author Nitesh
@@ -17,10 +23,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class FrontController {
 	
+	@Autowired
+	private UserService userService;
+
+	
 	
 	@RequestMapping(value = "/table", method = RequestMethod.GET)
 	public String tablePage(Model model) {
-
+		List<User> listuser = userService.listUser();
+		model.addAttribute("listuser", listuser);
 		return "table";
 	}
 	

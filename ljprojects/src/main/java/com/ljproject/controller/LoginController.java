@@ -1,8 +1,7 @@
 package com.ljproject.controller;
 
 import java.time.LocalTime;
-
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -82,9 +80,7 @@ public class LoginController {
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String adminPage(ModelMap model) {
 		model.addAttribute("user", getPrincipal());
-		java.util.List<User> listuser = userService.listUser();
-		model.addAttribute("listuser", listuser);
-		return "dashboard";
+			return "dashboard";
 	}
 	
 	 @RequestMapping(value = { "/admin/delete/{id}" }, method = RequestMethod.GET)
@@ -242,9 +238,6 @@ public class LoginController {
 			char[] otp = otpService.genrateOtp();
 			String convertedOtp = new String(otp);
 			user.setOtp(convertedOtp);
-			user.setCreatedOn(LocalTime.now());
-			user.setLastLogin(LocalTime.now());
-			;
 			userService.saveUser(user);
 			Role role = roleRepository.findOne((int) user.getId());
 
