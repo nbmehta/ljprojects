@@ -11,15 +11,12 @@ import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
 public class LjprojectApplication {
-	 public static final Logger logger = LoggerFactory.getLogger(LjprojectApplication.class);
-	 
+	public static final Logger logger = LoggerFactory.getLogger(LjprojectApplication.class);
 
 	public static void main(String[] args) {
-		
-		
+
 		SpringApplication.run(LjprojectApplication.class, args);
-		
-		
+
 	}
 
 }

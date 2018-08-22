@@ -198,11 +198,11 @@ public class LoginController {
 		String token = UUID.randomUUID().toString();
 		logger.info(passwordForgotDto.getEmail());
 		PasswordResetToken ps = new PasswordResetToken();
-		
+		ps.setUser(user);
 		ps.setExpiryDate(1);
 		ps.setToken(token);
 
-	//tokenSe	rvice.sendRestLink(user, token);
+		tokenService.sendRestLink(user, token);
 
 		passwordResetTokenRepository.save(ps);
 		return "forgotPassword";
