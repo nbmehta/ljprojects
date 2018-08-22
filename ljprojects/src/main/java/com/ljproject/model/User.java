@@ -45,6 +45,23 @@ public class User {
 	
 
 
+	/**
+	 * @param name
+	 * @param username2
+	 * @param email2
+	 * @param password2
+	 */
+	  public User() {
+
+    }
+
+    public User(String name, String username, String email, String password) {
+        this.firstName = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
 	public String getUsername() {
 		return username;
 	}

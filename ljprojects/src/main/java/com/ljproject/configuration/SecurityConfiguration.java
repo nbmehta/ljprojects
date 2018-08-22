@@ -1,6 +1,6 @@
 package com.ljproject.configuration;
 
-import javax.sql.DataSource;
+
 
 
 
@@ -21,13 +21,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
 import com.ljproject.handler.CustomSuccessHandler;
-import com.ljproject.handler.EventListeners;
+import com.ljproject.security.JwtAuthenticationEntryPoint;
+import com.ljproject.security.JwtAuthenticationFilter;
+import com.ljproject.service.CustomUserDetailsService;
+
 
 
 
@@ -43,46 +44,79 @@ import com.ljproject.handler.EventListeners;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 
-    
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	 @Autowired
+	 CustomUserDetailsService customUserDetailsService;
 
+	 @Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	 
 	@Autowired
-	private DataSource dataSource;
+	private JwtAuthenticationEntryPoint unauthorizedHandler;
+
+	@Bean
+	public JwtAuthenticationFilter jwtAuthenticationFilter() {
+	        return new JwtAuthenticationFilter();
+	 }
+
 	
    
 	@Autowired
 	CustomSuccessHandler customSuccesshandler;
 	
-	@Autowired
-    private AccessDeniedHandler accessDeniedHandler;
-	
-	@Autowired
-	private EventListeners customAuthFailureHandler;
-		
-	
-	@Value("${spring.queries.users-query}")
-	private String usersQuery;
-	
-	@Value("${spring.queries.roles-query}")
-	private String rolesQuery;
+
+	 @Bean(BeanIds.AUTHENTICATION_MANAGER)
+	 @Override
+	 public AuthenticationManager authenticationManagerBean() throws Exception {
+	        return super.authenticationManagerBean();
+	}
 	
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
 		auth.
-			jdbcAuthentication()
-				.usersByUsernameQuery(usersQuery)
-				.authoritiesByUsernameQuery(rolesQuery)
-				.dataSource(dataSource)
-				.passwordEncoder(bCryptPasswordEncoder);
+		 userDetailsService(customUserDetailsService)
+		.passwordEncoder(bCryptPasswordEncoder);
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
 
+		
+//		 http
+//         .cors()
+//             .and()
+//         .csrf()
+//             .disable()
+//         .exceptionHandling()
+//             .authenticationEntryPoint(unauthorizedHandler)
+//             .and()
+//         .sessionManagement()
+//             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//             .and()
+//         .authorizeRequests()
+//             .antMatchers("/",
+//                 "/favicon.ico",
+//                 "/**/*.png",
+//                 "/**/*.gif",
+//                 "/**/*.svg",
+//                 "/**/*.jpg",
+//                 "/**/*.html",
+//                 "/**/*.css",
+//                 "/**/*.js")
+//                 .permitAll()
+//             .antMatchers("/api/auth/**")
+//                 .permitAll()
+//             .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
+//                 .permitAll()
+//             .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
+//                 .permitAll()
+//             .anyRequest()
+//                 .authenticated();
+
+		
+		
 		http.
 			authorizeRequests()
 				.antMatchers("/").permitAll()
@@ -104,6 +138,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/").and().exceptionHandling()
 				.accessDeniedPage("/access-denied");
+		
+		
+		 // Add our custom JWT security filter
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		
 	}
