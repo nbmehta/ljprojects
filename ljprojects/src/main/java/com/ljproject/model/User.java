@@ -76,7 +76,6 @@ public class User {
 	@Transient
 	private String password;
 	@Column(name = "firstName")
-	@NotEmpty(message = "*Please provide your name")
 	private String firstName;
 	public int getApproved() {
 		return approved;
@@ -86,8 +85,7 @@ public class User {
 		this.approved = approved;
 	}
 
-	@Column(name = "lastName")
-	@NotEmpty(message = "*Please provide your last name")
+	@Column(name = "lastName",nullable = false)
 	private String lastName;
 	@Column(name = "active")
 	private int active;

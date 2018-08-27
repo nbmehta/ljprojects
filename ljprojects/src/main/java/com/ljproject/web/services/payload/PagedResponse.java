@@ -1,14 +1,7 @@
-/**
- * 
- */
 package com.ljproject.web.services.payload;
 
 import java.util.List;
 
-/**
- * @author Nitesh
- *
- */
 public class PagedResponse<T> {
 
     private List<T> content;
@@ -79,4 +72,3 @@ public class PagedResponse<T> {
         this.last = last;
     }
 }
-
