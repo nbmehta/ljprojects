@@ -26,9 +26,18 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
+import com.ljproject.web.services.model.audit.DateAudit;
+
+
+
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends DateAudit {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
