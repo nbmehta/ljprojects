@@ -7,10 +7,8 @@ package com.ljproject.configuration;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,13 +17,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
 import com.ljproject.handler.CustomSuccessHandler;
-import com.ljproject.security.JwtAuthenticationEntryPoint;
 import com.ljproject.security.JwtAuthenticationFilter;
 import com.ljproject.service.CustomUserDetailsService;
 
@@ -50,8 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 @Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	 
-	@Autowired
-	private JwtAuthenticationEntryPoint unauthorizedHandler;
+	
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -82,36 +76,36 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		 http
-         .cors()
-             .and()
-         .csrf()
-             .disable()
-         .exceptionHandling()
-             .authenticationEntryPoint(unauthorizedHandler)
-             .and()
-         .sessionManagement()
-             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-             .and()
-         .authorizeRequests()
-             .antMatchers("/",
-                 "/favicon.ico",
-                 "/**/*.png",
-                 "/**/*.gif",
-                 "/**/*.svg",
-                 "/**/*.jpg",
-                 "/**/*.html",
-                 "/**/*.css",
-                 "/**/*.js")
-                 .permitAll()
-             .antMatchers("/api/auth/**")
-                 .permitAll()
-             .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
-                 .permitAll()
-             .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
-                 .permitAll()
-             .anyRequest()
-                .authenticated();
+		// http
+        // .cors()
+         //    .and()
+         //.csrf()
+          //   .disable()
+         //.exceptionHandling()
+         //    .authenticationEntryPoint(unauthorizedHandler)
+          //   .and()
+         //.sessionManagement()
+         //    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+         //    .and()
+        // .authorizeRequests()
+         //    .antMatchers("/",
+         //        "/favicon.ico",
+         //        "/**/*.png",
+         //        "/**/*.gif",
+         //        "/**/*.svg",
+         //        "/**/*.jpg",
+         //        "/**/*.html",
+         //        "/**/*.css",
+         //        "/**/*.js")
+         //        .permitAll()
+         //    .antMatchers("/api/auth/**")
+         //        .permitAll()
+         //    .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
+         //        .permitAll()
+         //    .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
+         //        .permitAll()
+          //   .anyRequest()
+          //      .authenticated();
 
 		
 		

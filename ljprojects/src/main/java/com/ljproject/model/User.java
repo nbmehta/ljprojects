@@ -1,5 +1,6 @@
 package com.ljproject.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import javax.validation.constraints.Size;
@@ -109,10 +111,22 @@ public class User {
 	@Column(name = "approved")
 	@ColumnDefault("0")
 	private int approved;
+	
+	
+	 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	 private Set<UserProfile> userProfile = new HashSet<UserProfile>();
 
 
 
 	
+
+	public Set<UserProfile> getUserProfile() {
+		return userProfile;
+	}
+
+	public void setUserProfile(Set<UserProfile> userProfile) {
+		this.userProfile = userProfile;
+	}
 
 	public String getVerify() {
 		return verify;

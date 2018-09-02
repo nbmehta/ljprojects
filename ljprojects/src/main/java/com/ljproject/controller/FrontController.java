@@ -5,6 +5,7 @@ package com.ljproject.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.ljproject.model.FileBucket;
 import com.ljproject.model.User;
 import com.ljproject.service.UserService;
 
@@ -25,6 +27,8 @@ public class FrontController {
 	
 	@Autowired
 	private UserService userService;
+	
+	
 
 	
 	
@@ -41,11 +45,11 @@ public class FrontController {
 		return "dashboard";
 	}
 
-	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public String profilePage(Model model) {
 
 		return "user";
-	}
+	}*/
 
 	
 
@@ -89,6 +93,13 @@ public class FrontController {
 	public String notificationPage(Model model) {
 		model.addAttribute("user", getPrincipal());
 		return "notifications";
+	}
+	
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public String userProfile(Model model) {
+		model.addAttribute("user", getPrincipal());
+		model.addAttribute("fileBucket", new FileBucket());
+		return "upload";
 	}
 
 

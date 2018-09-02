@@ -1,14 +1,17 @@
 package com.ljproject.configuration;
 
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -27,6 +30,12 @@ import org.springframework.web.servlet.view.JstlView;
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
    private final long MAX_AGE_SECS = 3600;
+   
+   @Bean(name="multipartResolver")
+   public StandardServletMultipartResolver resolver(){
+       return new StandardServletMultipartResolver();
+   }
+
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -61,6 +70,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	 @Override
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 	        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+	    }
+	
+	    @Bean
+	    public MessageSource messageSource() {
+	        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+	        messageSource.setBasename("messages");
+	        return messageSource;
 	    }
 
 }

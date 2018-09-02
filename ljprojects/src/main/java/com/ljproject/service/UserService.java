@@ -1,9 +1,9 @@
 package com.ljproject.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.ljproject.model.User;
+
 
 
 public interface UserService {
@@ -13,5 +13,7 @@ public interface UserService {
 	public void sendEmailforApprove(User user);
 	public List<User> listUser();
 	void deleteUserById(long id);
+	
+	
 	
 }

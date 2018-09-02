@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ljproject.LjprojectApplication;
-import com.ljproject.model.Role;
 import com.ljproject.model.User;
 import com.ljproject.repository.RoleRepository;
 import com.ljproject.repository.UserRepository;
@@ -32,7 +30,7 @@ import com.ljproject.web.services.payload.SignUpRequest;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collections;
+
 
 /**
  * Created by rajeevkumarsingh on 02/08/17.
@@ -64,52 +62,49 @@ public class AuthController {
     @Autowired
 	OtpService otpService;
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsernameOrEmail(), loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
-    }
+		String jwt = tokenProvider.generateToken(authentication);
+		return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+	}
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userRepository.findByUsername(signUpRequest.getUsername()) == null) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
-        }
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@PostMapping("/signup")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+		if (userRepository.findByUsername(signUpRequest.getUsername()) == null) {
+			@SuppressWarnings({})
+			ResponseEntity responseEntity = new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+					HttpStatus.BAD_REQUEST);
+			return responseEntity;
+		}
 
-        if(userRepository.findByEmail(signUpRequest.getEmail()) != null) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
-                    HttpStatus.BAD_REQUEST);
-        }
+		if (userRepository.findByEmail(signUpRequest.getEmail()) != null) {
+			return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
+		}
 
-        // Creating user's account
-        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
-                signUpRequest.getEmail(), signUpRequest.getPassword());
-        user.setLastName("test");
+		// Creating user's account
+		User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
+				signUpRequest.getPassword());
+		user.setLastName("test");
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        char[] otp = otpService.genrateOtp();
+		char[] otp = otpService.genrateOtp();
 		String convertedOtp = new String(otp);
 		user.setOtp(convertedOtp);
-		
-        User result = userRepository.save(user);
-        
-        mailService.sendEmail(user);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/users/{username}")
-                .buildAndExpand(result.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
-    }
+		User result = userRepository.save(user);
+
+		mailService.sendEmail(user);
+		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{username}")
+				.buildAndExpand(result.getUsername()).toUri();
+
+		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+	}
 }

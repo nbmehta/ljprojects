@@ -1,7 +1,5 @@
 package com.ljproject.controller;
 
-import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 
@@ -26,10 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ljproject.dto.ChangePasswordDto;
 import com.ljproject.dto.PasswordForgotDto;
 import com.ljproject.model.PasswordResetToken;
-import com.ljproject.model.Role;
 import com.ljproject.model.User;
 import com.ljproject.repository.PasswordResetTokenRepository;
-import com.ljproject.repository.RoleRepository;
 import com.ljproject.service.UserService;
 import com.ljproject.util.MailService;
 import com.ljproject.util.OtpService;
@@ -50,14 +46,7 @@ public class LoginController {
 	@Autowired
 	private TokenService tokenService;
 
-	@Autowired
-	private RoleRepository roleRepository;
 	
-	
-
-
-	
-
 	@Autowired
 	OtpService otpService;
 
@@ -239,10 +228,9 @@ public class LoginController {
 			String convertedOtp = new String(otp);
 			user.setOtp(convertedOtp);
 			userService.saveUser(user);
-			Role role = roleRepository.findOne((int) user.getId());
-
+			
 			userService.sendEmailforApprove(user);
-			;
+			
 
 			logger.info("Role user ===>" + user.getRoles().toString());
 			mailService.sendEmail(user);

@@ -4,13 +4,14 @@ import java.util.Arrays;
 
 
 
+
 import java.util.HashSet;
 import java.util.List;
 
 
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
 
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import com.ljproject.repository.UserRepository;
 
 
 @Service("userService")
+@Transactional
 public class UserServiceImpl implements UserService{
 	 public static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -41,17 +43,14 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     
-    @Autowired
-	private SessionFactory sessionFactory;
-
+    
     
     @Autowired
     JavaMailSender mailSender;
     
    
     
- 
-	
+    
 	@Override
 	public User findUserByEmail(String email) {
 		return userRepository.findByEmail(email);

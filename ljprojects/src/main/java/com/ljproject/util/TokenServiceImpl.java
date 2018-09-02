@@ -3,7 +3,6 @@ package com.ljproject.util;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import javax.jws.soap.SOAPBinding.Use;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
@@ -18,8 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import com.ljproject.controller.LoginController;
 import com.ljproject.model.PasswordResetToken;
 import com.ljproject.model.User;
 import com.ljproject.repository.PasswordResetTokenRepository;
