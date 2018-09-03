@@ -17,5 +17,4 @@ public interface StateService {
 	public State findById(long id);
 	public List<State> listSate();
 	void deleteStateById(long id);
-
 }

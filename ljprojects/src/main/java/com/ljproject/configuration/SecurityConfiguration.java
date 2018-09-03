@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.ljproject.handler.CustomSuccessHandler;
 import com.ljproject.security.JwtAuthenticationFilter;
-import com.ljproject.service.CustomUserDetailsService;
+import com.ljproject.serviceImpl.CustomUserDetailsService;
 
 
 

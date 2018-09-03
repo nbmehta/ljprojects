@@ -23,8 +23,6 @@ import org.slf4j.LoggerFactory;
 public class LjprojectApplication {
 	public static final Logger logger = LoggerFactory.getLogger(LjprojectApplication.class);
 	
-	
-	
 	@PostConstruct
 	void init() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));

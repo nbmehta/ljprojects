@@ -14,9 +14,6 @@ public class ChangePasswordDto {
 	
 	private long userId;
 	
-	
-
-
 	public String getOldPassword() {
 		return OldPassword;
 	}

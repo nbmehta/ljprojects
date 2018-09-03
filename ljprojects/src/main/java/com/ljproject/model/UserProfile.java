@@ -3,6 +3,7 @@
  */
 package com.ljproject.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import javax.persistence.Basic;
@@ -23,7 +24,15 @@ import javax.persistence.Table;
  */
 	@Entity
 	@Table(name = "USER_PROFILE")
-	public class UserProfile {
+	public class UserProfile implements Serializable {
+		
+	
+	private static final long serialVersionUID = 1L;
+
+		public UserProfile() {}
+		public UserProfile(byte[] content) {
+			this.content = content;
+		}
 	
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)

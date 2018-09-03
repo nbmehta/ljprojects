@@ -17,5 +17,5 @@ public interface UserProfileService {
 	 List<UserProfile> findAllByUserId(long id);
 	 void saveDocument(UserProfile document);
 	 void deleteById(long id);
-
+	public byte[] getImageById(Integer id);
 }

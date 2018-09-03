@@ -6,8 +6,6 @@ package com.ljproject.service;
 import java.util.List;
 
 import com.ljproject.model.City;
-import com.ljproject.model.User;
-
 /**
  * @author Nitesh
  *

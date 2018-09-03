@@ -13,7 +13,4 @@ public interface UserService {
 	public void sendEmailforApprove(User user);
 	public List<User> listUser();
 	void deleteUserById(long id);
-	
-	
-	
 }

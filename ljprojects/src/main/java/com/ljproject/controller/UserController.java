@@ -12,12 +12,14 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ljproject.model.FileBucket;
@@ -48,7 +50,7 @@ public class UserController {
 	    public String uploadDocument(@Valid FileBucket fileBucket, BindingResult result, ModelMap model, @PathVariable int userId) throws IOException{
 	         
 	        if (result.hasErrors()) {
-	            System.out.println("validation errors");
+	        	logger.info("validation errors");
 	            User user = userService.findById(userId);
 	            model.addAttribute("user", user);
 	 
@@ -58,16 +60,24 @@ public class UserController {
 	            return "managedocuments";
 	        } else {
 	             
-	            System.out.println("Fetching file");
+	        	logger.info("Fetching file");
 	             
 	            User user = userService.findById(userId);
 	            model.addAttribute("user", user);
+	            model.addAttribute("userId", userId);
 	 
 	            saveDocument(fileBucket, user);
 	 
 	            return "redirect:/add-document-"+userId;
 	        }
 	    }
+	 
+	@ResponseBody
+	@RequestMapping(value = { "/get-image-{userId}" }, method = RequestMethod.GET, produces=MediaType.IMAGE_JPEG_VALUE)
+	public byte[] getImage(@PathVariable int userId, ModelMap model) {
+		byte[] img = userProfileService.getImageById(userId);
+		return img;
+	}
 	
 	 
 	   @RequestMapping(value = { "/add-document-{userId}" }, method = RequestMethod.GET)

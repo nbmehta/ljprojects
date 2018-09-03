@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ljproject.service;
+package com.ljproject.serviceImpl;
 
 import java.util.List;
 
@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.ljproject.dao.UserDetailsDao;
 import com.ljproject.model.UserProfile;
+import com.ljproject.repository.UserProfileRepository;
+import com.ljproject.service.UserProfileService;
 
 /**
  * @author Nitesh
@@ -23,6 +25,9 @@ public class UserProfileServiceImpl implements UserProfileService {
 	
 	@Autowired
     UserDetailsDao dao;
+	
+	@Autowired
+	UserProfileRepository userProfileRepo;
  
     public UserProfile findById(int id) {
         return dao.findById(id);
@@ -69,6 +74,14 @@ public class UserProfileServiceImpl implements UserProfileService {
 	public void deleteById(long id) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.ljproject.service.UserProfileService#getImageById(long)
+	 */
+	@Override
+	public byte[] getImageById(Integer id) {
+		return userProfileRepo.findContentById(id);
 	}
 	
 

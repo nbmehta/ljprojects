@@ -29,7 +29,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Import({ SecurityConfiguration.class })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
-   private final long MAX_AGE_SECS = 3600;
+   private static final long MAX_AGE_SECS = 3600;
    
    @Bean(name="multipartResolver")
    public StandardServletMultipartResolver resolver(){

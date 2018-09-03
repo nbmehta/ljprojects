@@ -26,48 +26,32 @@ public class MailServiceImpl implements MailService {
 	
 	@Override
 	public void sendEmail(Object object) {
-		
 		User user=(User)object;
-		
 		MimeMessagePreparator preparator = getContentWtihAttachementMessagePreparator(user);
-		 
-        try {
+		try {
             mailSender.send(preparator);
             logger.info("Otp has been sent.............................");
-          
         } catch (MailException ex) {
         	logger.info(ex.getMessage());
         }
-		
 	}
 	
 	
 
 	private MimeMessagePreparator getContentWtihAttachementMessagePreparator(final User user) {
-		 
-	        MimeMessagePreparator preparator = new MimeMessagePreparator() {
-	 
-	            public void prepare(MimeMessage mimeMessage) throws Exception {
-	                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-	 
-	                helper.setSubject("Otp has been sent.............................");
-	                helper.setFrom("bhagavatibhai93@gmail.com");
-	                helper.setTo(user.getEmail());
-	                
-	                String content = "Dear " + user.getFirstName()
-	                        + ", thank you for Registration "+"your otp is "+ user.getOtp() +".";
-	 
-	                helper.setText(content);
-	 
-	                
-	 
-	            }
-	        };
-	        return preparator;
-	    }
+		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+				helper.setSubject("Otp has been sent.............................");
+				helper.setFrom("bhagavatibhai93@gmail.com");
+				helper.setTo(user.getEmail());
+				String content = "Dear " + user.getFirstName() + ", thank you for Registration " + "your otp is "
+						+ user.getOtp() + ".";
+				helper.setText(content);
 
-
-	 
-	
+			}
+		};
+		return preparator;
+	}
 
 }

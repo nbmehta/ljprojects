@@ -1,5 +1,6 @@
 package com.ljproject.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,11 +33,9 @@ import com.ljproject.web.services.model.audit.DateAudit;
 
 @Entity
 @Table(name = "user")
-public class User extends DateAudit {
+public class User extends DateAudit implements Serializable{
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -124,9 +123,6 @@ public class User extends DateAudit {
 	
 	 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	 private Set<UserProfile> userProfile = new HashSet<UserProfile>();
-
-
-
 	
 
 	public Set<UserProfile> getUserProfile() {

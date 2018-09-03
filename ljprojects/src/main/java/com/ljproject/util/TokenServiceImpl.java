@@ -31,8 +31,8 @@ public class TokenServiceImpl implements TokenService{
 	@Autowired
 	PasswordResetTokenRepository passwordResetTokenRepository;
 	
-	@Autowired
-	MailService mailService;
+     @Autowired
+	 MailService mailService;
 	
 	 @Autowired
 	 JavaMailSender mailSender;
@@ -40,73 +40,64 @@ public class TokenServiceImpl implements TokenService{
 	 @Autowired
 	 OtpService otpService;
 
-	 @Override
-	 public String sendRestLink(User user, String token) {
-		
-		 try {
-			PasswordResetToken ps= new PasswordResetToken();
+	@Override
+	public String sendRestLink(User user, String token) {
+
+		try {
+			PasswordResetToken ps = new PasswordResetToken();
 			ps.setToken(token);
-			
-					
-				MimeMessagePreparator preparator = getContentWtihAttachementMessagePreparator(user,ps);  
-	            mailSender.send(preparator);
-	            logger.info("Reset link has been sent.............................");
-	          
-	        } catch (MailException ex) {
-	        	logger.info(ex.getMessage());
-	        }
-		 
-		 return token;
-		
-		
+
+			MimeMessagePreparator preparator = getContentWtihAttachementMessagePreparator(user, ps);
+			mailSender.send(preparator);
+			logger.info("Reset link has been sent.............................");
+
+		} catch (MailException ex) {
+			logger.info(ex.getMessage());
+		}
+
+		return token;
+
 	}
 
-	private MimeMessagePreparator getContentWtihAttachementMessagePreparator(User user,PasswordResetToken ps) {
-		 MimeMessagePreparator preparator = new MimeMessagePreparator() {
-			 
-	            public void prepare(MimeMessage mimeMessage) throws Exception {
-	                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-	                
-	                
-					String url = "http://localhost:8080" + "/reset/changePassword?id=" + 
-	                	      user.getId() + "&token=" + ps.getToken();
-	 
-	                helper.setSubject("Reset link has been sent.............................");
-	                helper.setFrom("mehtanitesh786@gmail.com");
-	                helper.setTo(user.getEmail());
-	                
-	                String content = "Dear " + user.getFirstName()
-	                        + ", Reset your password " + url +".";
-	 
-	                helper.setText(content);
-	 
-	                
-	 
-	            }
-	        };
-	        return preparator;
+	private MimeMessagePreparator getContentWtihAttachementMessagePreparator(User user, PasswordResetToken ps) {
+		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+				String url = "http://localhost:8080" + "/reset/changePassword?id=" + user.getId() + "&token="
+						+ ps.getToken();
+
+				helper.setSubject("Reset link has been sent.............................");
+				helper.setFrom("mehtanitesh786@gmail.com");
+				helper.setTo(user.getEmail());
+
+				String content = "Dear " + user.getFirstName() + ", Reset your password " + url + ".";
+
+				helper.setText(content);
+
+			}
+		};
+		return preparator;
 	}
 
 	@Override
 	public String validatePasswordResetToken(long id, String token) {
-		PasswordResetToken passToken =  passwordResetTokenRepository.findByToken(token);
-			    if ((passToken == null) || (passToken.getUser()
-			        .getId() != id)) {
-			        return "invalidToken";
-			    }
-			 
-			    Calendar cal = Calendar.getInstance();
-			    if ((passToken.getExpiryDate().getTime() - cal.getTime()
-			        .getTime()) <= 0) {
-			        return "expired";
-			    }
-			 
-			    User user = passToken.getUser();
-			    Authentication auth = new UsernamePasswordAuthenticationToken(
-			      user, null, Arrays.asList(
-			      new SimpleGrantedAuthority("CHANGE_PASSWORD_PRIVILEGE")));
-			    SecurityContextHolder.getContext().setAuthentication(auth);
-			    return null;
+		PasswordResetToken passToken = passwordResetTokenRepository.findByToken(token);
+		if ((passToken == null) || (passToken.getUser().getId() != id)) {
+			return "invalidToken";
+		}
+
+		Calendar cal = Calendar.getInstance();
+		if ((passToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+			return "expired";
+		}
+
+		User user = passToken.getUser();
+		Authentication auth = new UsernamePasswordAuthenticationToken(user, null,
+				Arrays.asList(new SimpleGrantedAuthority("CHANGE_PASSWORD_PRIVILEGE")));
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		return null;
 	}
 
 }

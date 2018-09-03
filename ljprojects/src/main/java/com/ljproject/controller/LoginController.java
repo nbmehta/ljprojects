@@ -109,11 +109,8 @@ public class LoginController {
 	@RequestMapping(value = "/reset/changePassword", method = RequestMethod.GET)
 	public String changePassword(@RequestParam(required = false) String token, @RequestParam("id") long id,
 			Model model) {
-
-		logger.info("Token==================>" +token);
 		model.addAttribute("changePassword", new ChangePasswordDto());
 		String reStringsult = tokenService.validatePasswordResetToken(id, token);
-		logger.info("testing demo" + reStringsult);
 		model.addAttribute("token", token);
 		model.addAttribute("userid", id);
 		if (reStringsult == null) {
@@ -127,9 +124,7 @@ public class LoginController {
 	@RequestMapping(value = { "/admin/updatePassword", "/user/updatePassword" }, method = RequestMethod.GET)
 	public String updatePassword(@RequestParam(required = false) String token, Model model) {
 		Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-		
 		logger.info(loggedInUser.getName());
-		System.out.println(loggedInUser.getName());
 		model.addAttribute("updatePassword", new ChangePasswordDto());
 		return "updatePassword";
 	}
@@ -137,33 +132,25 @@ public class LoginController {
 	@RequestMapping(value = { "/admin/updatePassword", "/user/updatePassword" }, method = RequestMethod.POST)
 	public String updatePass(@RequestParam(required = false) String token, Model model,
 			@ModelAttribute("updatePassword") ChangePasswordDto changePasswordDto) {
-
 		Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-
 		logger.info("Thsi is testing api ------------------------------------");
 		logger.info(loggedInUser.getName());
-		System.out.println(changePasswordDto.getOldPassword() + changePasswordDto.getConfirmpasword());
-		
 		return "updatePassword";
 	}
 
 	@RequestMapping(value = "/reset/submit", method = RequestMethod.POST)
 	public String changePassword(@ModelAttribute("changePassword") ChangePasswordDto changePasswordDto,
 			@RequestParam("token") String token, @RequestParam("userId") long userId) {
-
-		logger.info("this is test " + token);
 		PasswordResetToken ps = passwordResetTokenRepository.findByToken(token);
 
 		User user = ps.getUser();
 		user.setPassword(changePasswordDto.getPassword());
 
-		logger.info("this is testing password" + user.getPassword());
+
 		if (changePasswordDto.getPassword().equals(changePasswordDto.getConfirmpasword())) {
 			userService.saveUser(user);
 		}
 		logger.info("save successfully ");
-
-		logger.info("this is test " + userId);
 		return "resetPassword";
 	}
 
@@ -186,22 +173,7 @@ public class LoginController {
 		passwordResetTokenRepository.save(ps);
 		return "forgotPassword";
 	}
-
-	/*
-	 * @RequestMapping(value = "/login", method = RequestMethod.GET) public String
-	 * loginPage() { return "login"; }
-	 */
-	/*
-	 * @RequestMapping(value = "/login", method = RequestMethod.GET) public String
-	 * login(Model model, String error, String logout) { if (error != null)
-	 * model.addAttribute("error", "Your username and password is invalid.");
-	 * 
-	 * if (logout != null) model.addAttribute("message",
-	 * "You have been logged out successfully.");
-	 * 
-	 * return "login"; }
-	 */
-
+	
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public ModelAndView registration() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -230,9 +202,6 @@ public class LoginController {
 			userService.saveUser(user);
 			
 			userService.sendEmailforApprove(user);
-			
-
-			logger.info("Role user ===>" + user.getRoles().toString());
 			mailService.sendEmail(user);
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());
@@ -241,28 +210,6 @@ public class LoginController {
 		}
 		return modelAndView;
 	}
-
-	/*
-	 * @RequestMapping(value="/admin", method = RequestMethod.GET) public
-	 * ModelAndView home(){ ModelAndView modelAndView = new ModelAndView();
-	 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 * User user = userService.findUserByEmail(auth.getName());
-	 * modelAndView.addObject("userName", "Welcome " + user.getName() + " " +
-	 * user.getLastName() + " (" + user.getEmail() + ")"); modelAndView.addObject(
-	 * "adminMessage","Content Available Only for Users with Admin Role");
-	 * modelAndView.setViewName("welcome"); return modelAndView; }
-	 */
-
-	/*
-	 * @RequestMapping(value="/user", method = RequestMethod.GET) public
-	 * ModelAndView homeuser(){ ModelAndView modelAndView = new ModelAndView();
-	 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	 * User user = userService.findUserByEmail(auth.getName());
-	 * modelAndView.addObject("userName", "Welcome " + user.getName() + " " +
-	 * user.getLastName() + " (" + user.getEmail() + ")"); modelAndView.addObject(
-	 * "adminMessage","Content Available Only for Users with USER Role");
-	 * modelAndView.setViewName("user/home"); return modelAndView; }
-	 */
 
 	@RequestMapping(value = { "/test" }, method = RequestMethod.GET)
 	public ModelAndView test() {

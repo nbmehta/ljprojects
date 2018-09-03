@@ -58,9 +58,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 		return url;
     }
  
+    @Override
     public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
         this.redirectStrategy = redirectStrategy;
     }
+    @Override
     protected RedirectStrategy getRedirectStrategy() {
         return redirectStrategy;
     }
@@ -69,13 +71,14 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 		if (roles.contains("ROLE_USER")) {
 			return true;
 		}
-		return false;
+			return false;
+		
 	}
 
 	private boolean isAdmin(List<String> roles) {
 		if (roles.contains("ROLE_ADMIN")) {
 			return true;
-		}
+		}	
 		return false;
 	}
 
@@ -83,7 +86,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler{
 		if (roles.contains("ROLE_DBA")) {
 			return true;
 		}
-		return false;
-	}
+			return false;
+		}
 
 }
