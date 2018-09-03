@@ -11,8 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -32,9 +30,10 @@ public class State implements Serializable{
 	private long id;
 	
 	@NotBlank
-	@Size(max = 15)
 	@Column(name = "state_name")
 	private String stateName;
+	
+	
 
 	public long getId() {
 		return id;

@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -23,7 +24,7 @@ import javax.persistence.Table;
  *
  */
 	@Entity
-	@Table(name = "USER_PROFILE")
+	@Table(name = "user_profile")
 	public class UserProfile implements Serializable {
 		
 	
@@ -53,8 +54,20 @@ import javax.persistence.Table;
 		private byte[] content;
 	
 		@ManyToOne(optional = false)
-		@JoinColumn(name = "USER_ID")
+		@JoinColumn(name = "user_id")
 		private User user;
+		
+		
+		@OneToOne
+		@JoinColumn(name="state_id")
+		private State state;
+		
+		
+		@OneToOne
+		@JoinColumn(name="city_id")
+		private City city;
+		
+		
 	
 		public Integer getId() {
 			return id;

@@ -4,7 +4,6 @@
 package com.ljproject.model;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +34,8 @@ public class City implements Serializable{
 	@Size(max = 15)
 	@Column(name = "city_name")
 	private String countryName;
+	
+
 
 	public long getId() {
 		return id;

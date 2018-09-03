@@ -19,6 +19,20 @@
 		<%@ include file = "nav_fixed.jsp" %>
         <div class="content">
             <div class="container-fluid">
+            	<div class="row">
+            		<div class="col-md-12">
+                        <div class="card">
+
+                            <div class="header">
+                                <h4 class="title">Lodo</h4>
+                                <p class="category">Lodo Nitesh</p>
+                            </div>
+                            <div class="content">
+                                <img src="get-image-${userId}">
+                            </div>
+                        </div>
+                    </div>
+            	</div>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
