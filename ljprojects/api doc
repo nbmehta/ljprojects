@@ -1,0 +1,40 @@
+
+
+Post Request===> http://localhost:5000/api/auth/signup
+
+{
+  "name": "Nitesh",
+  "email": "nitesh.mehta68@yahoo.com",
+  "username": "nmehta1894",
+  "password": "12345678"
+}
+
+
+
+
+http://localhost:5000/api/auth/signin
+
+POST METHOD
+
+{
+  "usernameOrEmail": "nmehta1893",
+  "password": "12345678"
+}
+
+
+Reponce
+
+{
+    "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTM1NDYwNjg4LCJleHAiOjE1MzYwNjU0ODh9.PFX47LrowASNUY_Ec4M_yn90wF2T2K5Oy3i10IAyhUbLmQFyeBMJt3ShQenaBP3d-KU3stidFTOLdM3qf1hfkg",
+    "tokenType": "Bearer"
+}
+
+
+GET METHOD
+
+http://localhost:5000/api/user/me
+
+pass header parameter 
+
+
+authorization:Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTM1MzAwODU5LCJleHAiOjE1MzU5MDU2NTl9.B9-JyKmh6H0QSicosZh_lMm6Eoe8VXLn6vNnYtOd2lPUI-vX7pmtj3KsxgEtptVH2h4qoKuHv9-NpFo-4bfyRQ
