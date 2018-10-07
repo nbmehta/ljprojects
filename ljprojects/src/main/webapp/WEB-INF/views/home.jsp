@@ -46,10 +46,12 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li><a href="/registration"><span class="glyphicon glyphicon-log-in"></span>Registration</a></li>
       </ul>
     </div>
   </div>
 </nav>
+<img src="/static/imeges/abc.jpg">
 
 <div class="jumbotron">
   <div class="container text-center">
