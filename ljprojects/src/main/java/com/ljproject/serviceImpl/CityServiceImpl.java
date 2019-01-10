@@ -57,9 +57,22 @@ public class CityServiceImpl implements CityService{
 	/* (non-Javadoc)
 	 * @see com.ljproject.service.CityService#deleteCityById(long)
 	 */
-	@Override
-	public void deleteCityById(long id) {
-		cityRepository.delete((int) id);
+	public void deleteCityById(Integer id) {
+		cityRepository.delete(id);
 		
 	}
+
+	/* (non-Javadoc)
+	 * @see com.ljproject.service.CityService#deleteCityById(long)
+	 */
+	@Override
+	public void deleteCityById(long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.ljproject.service.CityService#deleteCityById(long)
+	 */
+	
 }

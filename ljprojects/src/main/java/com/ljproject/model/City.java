@@ -33,7 +33,7 @@ public class City implements Serializable{
 	@NotBlank
 	@Size(max = 15)
 	@Column(name = "city_name")
-	private String countryName;
+	private String cityName;
 	
 
 
@@ -45,19 +45,25 @@ public class City implements Serializable{
 		this.id = id;
 	}
 
-	public String getCountryName() {
-		return countryName;
+	
+
+	public String getCityName() {
+		return cityName;
 	}
 
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((countryName == null) ? 0 : countryName.hashCode());
+		result = prime * result + ((cityName == null) ? 0 : cityName.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
@@ -71,10 +77,10 @@ public class City implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		City other = (City) obj;
-		if (countryName == null) {
-			if (other.countryName != null)
+		if (cityName == null) {
+			if (other.cityName != null)
 				return false;
-		} else if (!countryName.equals(other.countryName))
+		} else if (!cityName.equals(other.cityName))
 			return false;
 		if (id != other.id)
 			return false;
@@ -83,7 +89,8 @@ public class City implements Serializable{
 
 	@Override
 	public String toString() {
-		return "City [id=" + id + ", countryName=" + countryName + "]";
+		return "City [id=" + id + ", cityName=" + cityName + "]";
 	}
 
+	
 }

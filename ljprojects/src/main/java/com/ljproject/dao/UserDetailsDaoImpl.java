@@ -3,13 +3,8 @@
  */
 package com.ljproject.dao;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import com.ljproject.model.UserProfile;
 
 /**
  * @author Nitesh
@@ -17,34 +12,8 @@ import com.ljproject.model.UserProfile;
  */
 
 @Repository("userDetailsDaoImpl")
-public class UserDetailsDaoImpl extends AbstractDao<Integer, UserProfile> implements UserDetailsDao {
+public class UserDetailsDaoImpl implements UserDetailsDao {
 	
-		@SuppressWarnings("unchecked")
-		public List<UserProfile> findAll() {
-			Criteria crit = createEntityCriteria();
-			return (List<UserProfile>) crit.list();
-		}
-	
-		public void save(UserProfile userProfile) {
-			persist(userProfile);
-		}
-	
-		public UserProfile findById(int id) {
-			return getByKey(id);
-		}
-	
-		@SuppressWarnings("unchecked")
-		public List<UserProfile> findAllByUserId(int userId) {
-			Criteria crit = createEntityCriteria();
-			Criteria userCriteria = crit.createCriteria("user");
-			userCriteria.add(Restrictions.eq("id", userId));
-			return (List<UserProfile>) crit.list();
-		}
-	
-		public void deleteById(int id) {
-			UserProfile document = getByKey(id);
-			delete(document);
-		}
 	
 		/*
 		 * (non-Javadoc)
@@ -77,6 +46,15 @@ public class UserDetailsDaoImpl extends AbstractDao<Integer, UserProfile> implem
 		public void deleteUserById(Long id) {
 			// TODO Auto-generated method stub
 	
+		}
+
+		/* (non-Javadoc)
+		 * @see com.ljproject.dao.UserDetailsDao#deleteById(int)
+		 */
+		@Override
+		public void deleteById(int id) {
+			// TODO Auto-generated method stub
+			
 		}
 	
 	}

@@ -6,16 +6,19 @@ package com.ljproject.controller;
 import java.util.List;
 
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.ljproject.model.FileBucket;
 import com.ljproject.model.User;
+import com.ljproject.model.UserProfile;
 import com.ljproject.service.UserService;
 
 /**
@@ -77,12 +80,14 @@ public class FrontController {
 		model.addAttribute("user", getPrincipal());
 		return "notifications";
 	}
-
-	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public String userProfile(Model model) {
-		model.addAttribute("user", getPrincipal());
-		model.addAttribute("fileBucket", new FileBucket());
-		return "upload";
+	
+	@RequestMapping(value = "/userprofile", method = RequestMethod.GET)
+	public String userProfile(@ModelAttribute("userprofile") UserProfile userProfile,Model model) {
+		System.out.println("test");
+		model.addAttribute("userprofile",userProfile);
+	
+		return "userprofile";
 	}
 
+	
 }

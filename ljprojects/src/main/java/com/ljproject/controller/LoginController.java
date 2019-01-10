@@ -24,9 +24,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ljproject.dto.ChangePasswordDto;
 import com.ljproject.dto.PasswordForgotDto;
+import com.ljproject.exception.UserNotFoundException;
 import com.ljproject.model.PasswordResetToken;
 import com.ljproject.model.User;
+import com.ljproject.model.UserProfile;
 import com.ljproject.repository.PasswordResetTokenRepository;
+import com.ljproject.service.UserProfileService;
 import com.ljproject.service.UserService;
 import com.ljproject.util.MailService;
 import com.ljproject.util.OtpService;
@@ -46,6 +49,10 @@ public class LoginController {
 
 	@Autowired
 	private TokenService tokenService;
+	
+	
+	@Autowired
+	private UserProfileService userProfileService;
 
 	
 	@Autowired
@@ -56,6 +63,7 @@ public class LoginController {
 
 	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
 	public ModelAndView login() {
+		logger.info("validation errors");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("login");
 		return modelAndView;
@@ -63,6 +71,7 @@ public class LoginController {
 
 	@RequestMapping(value = { "/", "/home" }, method = RequestMethod.GET)
 	public String homePage() {
+		logger.info("validation errors");
 
 		return "home";
 	}
@@ -229,6 +238,15 @@ public class LoginController {
 			userName = principal.toString();
 		}
 		return userName;
+	}
+	
+	
+	
+	@RequestMapping(value = { "/adduserprofile" }, method = RequestMethod.POST)
+	public String addUserprofile(@ModelAttribute("userprofile") UserProfile userProfile,Model model) {
+		model.addAttribute("userprofile", userProfile);
+		userProfileService.saveUserProfile(userProfile);
+		return "dashboard";
 	}
 
 }

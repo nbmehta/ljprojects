@@ -109,8 +109,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 		
 		
-		http.
-			authorizeRequests()
+		http.csrf().disable()
+				.authorizeRequests()
+			    .antMatchers("/webjars/**").permitAll()
 				.antMatchers("/").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/test").permitAll()
@@ -126,11 +127,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //				.failureHandler(customAuthFailureHandler)
 				.usernameParameter("email")
 				.passwordParameter("password")
-				.and().logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/").and().exceptionHandling()
+				.and()
+				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.deleteCookies("remember-me").permitAll().and()
+				.rememberMe().tokenValiditySeconds(180).and()
+				.logout().logoutSuccessUrl("/").and().exceptionHandling()
 				.accessDeniedPage("/access-denied");
-		
 		
 		 // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

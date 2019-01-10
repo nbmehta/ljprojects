@@ -31,7 +31,7 @@ public class SwaggerConfig {
 	}
 
 	private Predicate<String> postPaths() {
-		return or(regex("/api/posts.*"), regex("/api/javainuse.*"));
+		return or(regex("/api/auth.*"), regex("/api/auth/signin.*"));
 	}
 
 	private ApiInfo apiInfo() {
@@ -39,7 +39,7 @@ public class SwaggerConfig {
 				.description("JavaInUse API reference for developers")
 				.termsOfServiceUrl("http://localhost:8080")
 				.contact("bhagavatibhai93@gmail.com").license("JavaInUse License")
-				.licenseUrl("bhagavatibhai93@gmail.com").version("1.0").build();
+				.licenseUrl("/api/auth/signin").version("1.0").build();
 	}
 
 }

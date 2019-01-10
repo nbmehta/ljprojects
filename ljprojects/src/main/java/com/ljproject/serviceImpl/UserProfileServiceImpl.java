@@ -3,15 +3,15 @@
  */
 package com.ljproject.serviceImpl;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ljproject.dao.UserDetailsDao;
 import com.ljproject.model.UserProfile;
+import com.ljproject.repository.CityRepository;
 import com.ljproject.repository.UserProfileRepository;
 import com.ljproject.service.UserProfileService;
 
@@ -24,65 +24,21 @@ import com.ljproject.service.UserProfileService;
 public class UserProfileServiceImpl implements UserProfileService {
 	
 	@Autowired
-    UserDetailsDao dao;
+	CityRepository cityRepository;
 	
 	@Autowired
-	UserProfileRepository userProfileRepo;
- 
-    public UserProfile findById(int id) {
-        return dao.findById(id);
-    }
- 
-    public List<UserProfile> findAll() {
-        return dao.findAll();
-    }
- 
-    public List<UserProfile> findAllByUserId(int userId) {
-        return dao.findAllByUserId(userId);
-    }
-     
-    public void saveDocument(UserProfile document){
-        dao.save(document);
-    }
- 
-    public void deleteById(int id){
-        dao.deleteById(id);
-    }
+	UserProfileRepository userProfileRepository;
+
+	 public static final Logger logger = LoggerFactory.getLogger(CityServiceImpl.class);
 
 	/* (non-Javadoc)
-	 * @see com.ljproject.service.UserProfileService#findById(long)
+	 * @see com.ljproject.service.UserProfileService#saveUserProfile(com.ljproject.model.UserProfile)
 	 */
 	@Override
-	public UserProfile findById(long id) {
+	public void saveUserProfile(UserProfile userProfile) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.ljproject.service.UserProfileService#findAllByUserId(long)
-	 */
-	@Override
-	public List<UserProfile> findAllByUserId(long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.ljproject.service.UserProfileService#deleteById(long)
-	 */
-	@Override
-	public void deleteById(long id) {
-		// TODO Auto-generated method stub
+		userProfileRepository.save(userProfile);
 		
 	}
-
-	/* (non-Javadoc)
-	 * @see com.ljproject.service.UserProfileService#getImageById(long)
-	 */
-	@Override
-	public byte[] getImageById(Integer id) {
-		return userProfileRepo.findContentById(id);
-	}
-	
 
 }

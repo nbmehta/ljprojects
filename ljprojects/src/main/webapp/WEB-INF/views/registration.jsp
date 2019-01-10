@@ -80,8 +80,25 @@
                     </div>
                 </div>
             </div>
-                 
-            <div class="row">
+
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="col-md-3 control-lable" for="sex">sex</label>
+							<div class="col-sm-7">
+								<label class="radio-inline">
+								 <form:radiobutton	path="sex" value="M" checked="checked" /> Male
+								</label>
+								 <label class="radio-inline"> <form:radiobutton	path="sex" value="F" /> Female
+								</label> <br />
+								<form:errors path="sex" class="control-label" />
+							</div>
+
+						</div>
+					</div>
+
+
+
+					<div class="row">
                 <div class="form-actions floatRight">
                     <c:choose>
                         <c:when test="${edit}">

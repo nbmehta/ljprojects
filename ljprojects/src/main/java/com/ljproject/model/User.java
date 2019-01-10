@@ -1,7 +1,7 @@
 package com.ljproject.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import javax.validation.constraints.Size;
@@ -52,8 +51,24 @@ public class User extends DateAudit implements Serializable{
     @Size(max = 15)
     @Column(name = "username")
     private String username;
+    
+    @Column(name = "sex")
+    private String sex;
+    
+    
+    
 	
 
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	
 
 	/**
 	 * @param name
@@ -121,17 +136,8 @@ public class User extends DateAudit implements Serializable{
 	private int approved;
 	
 	
-	 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	 private Set<UserProfile> userProfile = new HashSet<UserProfile>();
 	
-
-	public Set<UserProfile> getUserProfile() {
-		return userProfile;
-	}
-
-	public void setUserProfile(Set<UserProfile> userProfile) {
-		this.userProfile = userProfile;
-	}
+	
 
 	public String getVerify() {
 		return verify;

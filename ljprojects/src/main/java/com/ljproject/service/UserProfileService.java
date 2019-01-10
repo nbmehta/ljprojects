@@ -3,7 +3,6 @@
  */
 package com.ljproject.service;
 
-import java.util.List;
 
 import com.ljproject.model.UserProfile;
 
@@ -11,11 +10,10 @@ import com.ljproject.model.UserProfile;
  * @author Nitesh
  *
  */
-public interface UserProfileService {
-	 UserProfile findById(long id);
-	 List<UserProfile> findAll();
-	 List<UserProfile> findAllByUserId(long id);
-	 void saveDocument(UserProfile document);
-	 void deleteById(long id);
-	public byte[] getImageById(Integer id);
+
+public interface UserProfileService  {
+	
+	public void saveUserProfile(UserProfile userProfile);
+	
+
 }
